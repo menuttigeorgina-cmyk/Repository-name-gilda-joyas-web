@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Chatbot from "./components/Chatbot";
 
 type Product = {
   id: number;
@@ -270,6 +271,7 @@ export default function Home() {
         </div>
       )}
 
+      <Chatbot />
     </main>
   );
 }
