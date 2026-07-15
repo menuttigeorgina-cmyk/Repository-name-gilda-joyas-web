@@ -19,13 +19,13 @@ const answers = {
   talles:
     "Para saber el talle de un anillo, podés medir el diámetro interno de un anillo que ya uses y compararlo con una guía de talles. Si no estás segura, conviene consultar antes de comprar.",
   envios:
-    "Las entregas se coordinan según zona y disponibilidad. Al finalizar el pedido podés indicar tu zona para que GIVEM Joyas confirme la mejor opción de entrega.",
+    "Las entregas se coordinan según zona y disponibilidad. Al finalizar el pedido podés indicar tu zona para que GILDA Joyas confirme la mejor opción de entrega.",
   pagos:
-    "En esta demo el pedido se simula dentro de la web. En una versión real, GIVEM Joyas confirmaría el medio de pago disponible antes de cerrar la compra.",
+    "En esta demo el pedido se simula dentro de la web. En una versión real, GILDA Joyas confirmaría el medio de pago disponible antes de cerrar la compra.",
   stock:
     "El stock se confirma antes de finalizar la compra real. Esto permite validar disponibilidad, material, color o talle antes de coordinar el pago y la entrega.",
   cambios:
-    "Las condiciones de cambio deben confirmarse con la marca. En general, se recomienda conservar el producto sin uso y con su packaging. Esta respuesta se completará con la política real de GIVEM Joyas.",
+    "Las condiciones de cambio deben confirmarse con la marca. En general, se recomienda conservar el producto sin uso y con su packaging. Esta respuesta se completará con la política real de GILDA Joyas.",
 };
 
 function getBotResponse(message: string) {
@@ -52,7 +52,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       from: "bot",
-      text: "Hola ✨ Soy el asistente virtual de GIVEM Joyas. Estoy para ayudarte a elegir mejor antes de comprar.",
+      text: "Hola ✨ Soy el asistente virtual de GILDA Joyas. Estoy para ayudarte a elegir mejor antes de comprar.",
     },
   ]);
 
@@ -98,10 +98,10 @@ export default function Chatbot() {
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FBF7F0]">
-                  <img src="/brand/givemconflor.svg" alt="" className="h-5 w-5" />
+                  <img src="/brand/gildajoyaslogo.svg" alt="" className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[#2B2B2B]">Asistente GIVEM</h4>
+                  <h4 className="font-semibold text-[#2B2B2B]">Asistente GILDA</h4>
                   <p className="mt-1 text-xs text-[#A9A5A0]">
                     Ayuda para elegir y comprar
                   </p>
@@ -179,14 +179,14 @@ export default function Chatbot() {
         className="flex min-w-[280px] items-center gap-4 rounded-2xl border border-[#C8B6A8] bg-white px-5 py-4 text-left shadow-2xl transition hover:-translate-y-0.5 hover:shadow-[0_18px_45px_rgba(43,43,43,0.16)] focus:outline-none focus:ring-0 focus:ring-0"
       >
         <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#FBF7F0]">
-          <img src="/brand/givemconflor.svg" alt="" className="h-10 w-10 object-contain" />
+          <img src="/brand/gildajoyaslogo.svg" alt="" className="h-10 w-10 object-contain" />
         </span>
         <span className="flex flex-col items-center leading-tight">
           <span className="block text-base font-semibold text-[#2B2B2B]">
             ¿Necesitás ayuda?
           </span>
           <span className="mt-1 block text-sm font-medium text-[#8a817c]">
-            Asistente GIVEM
+            Asistente GILDA
           </span>
         </span>
       </button>

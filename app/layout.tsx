@@ -15,7 +15,7 @@ const raleway = Raleway({
 });
 
 export const metadata: Metadata = {
-  title: "GIVEM Joyas",
+  title: "GILDA Joyas",
   description: "Joyas simples, modernas y auténticas.",
 };
 

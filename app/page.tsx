@@ -73,8 +73,8 @@ export default function Home() {
 
           <div className="flex justify-center">
             <img
-              src="/brand/logofinal.svg"
-              alt="GIVEM Joyas"
+              src="/brand/gildajoyaslogo.svg"
+              alt="GILDA Joyas"
               className="h-24 w-24 object-contain md:h-28 md:w-28"
             />
           </div>
@@ -247,9 +247,9 @@ export default function Home() {
         className="mx-auto grid max-w-7xl gap-6 px-6 py-12 md:grid-cols-3 md:px-10"
       >
         {[
-          ["01", "Elegí tus joyas", "Recorré el catálogo y agregá tus piezas favoritas al carrito."],
-          ["02", "Completá tus datos", "Simulá el pedido indicando nombre, email, zona de entrega y medio de pago."],
-          ["03", "Confirmación", "GIVEM Joyas confirma disponibilidad y coordina la entrega."],
+          ["01", "Elegí tus piezas", "Explorá el catálogo y seleccioná las joyas que más conectan con tu estilo."],
+          ["02", "Armá tu pedido", "Completá tus datos y dejá tu zona de entrega para poder coordinar disponibilidad."],
+          ["03", "Coordiná la entrega", "GILDA Joyas confirma el pedido, el stock y la forma de entrega más conveniente."],
         ].map(([number, title, text]) => (
           <div key={number} className="rounded-[1.5rem] border border-[#C8B6A8] bg-white/50 p-6">
             <p className="text-xs uppercase tracking-[0.3em] text-[#A9A5A0]">{number}</p>
@@ -268,9 +268,11 @@ export default function Home() {
             Diseños pensados para acompañarte todos los días.
           </h2>
           <p className="mt-5 max-w-2xl leading-7 text-[#E6E3E0]">
-            Trabajamos con plata 925, acero blanco, acero dorado, acero quirúrgico
-            y piezas artesanales. Para conservar tus joyas, evitá perfumes,
-            cremas y productos químicos.
+            Cada pieza está pensada para acompañarte en lo cotidiano: diseños simples,
+            combinables y fáciles de usar. Trabajamos con plata 925, acero blanco,
+            acero dorado, acero quirúrgico y accesorios artesanales. Para conservar
+            tus joyas por más tiempo, evitá el contacto directo con perfumes,
+            cremas, agua de pileta, agua de mar y productos químicos.
           </p>
         </div>
       </section>
@@ -309,12 +311,12 @@ export default function Home() {
               </>
             ) : (
               <div className="text-center">
-                <img src="/brand/logofinal.svg" alt="" className="mx-auto h-20 w-20" />
+                <img src="/brand/gildajoyaslogo.svg" alt="" className="mx-auto h-20 w-20" />
                 <h4 className="mt-4 text-xl font-semibold">
                   Pedido recibido correctamente
                 </h4>
                 <p className="mt-2 text-sm text-[#6b625d]">
-                  GIVEM Joyas se comunicará para confirmar disponibilidad y entrega.
+                  GILDA Joyas se comunicará para confirmar disponibilidad y entrega.
                 </p>
                 <button
                   onClick={() => {
