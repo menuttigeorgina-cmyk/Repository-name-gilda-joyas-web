@@ -62,8 +62,8 @@ export default function Home() {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <main className="min-h-screen bg-[#FAF6F2] text-[#2B2B2B]">
-      <header className="sticky top-0 z-30 border-b border-[#E6E3E0] bg-[#FAF6F2]/95 backdrop-blur">
+    <main className="min-h-screen bg-[#FBF7F0] text-[#2B2B2B]">
+      <header className="sticky top-0 z-30 border-b border-[#E6E3E0] bg-[#FBF7F0]/95 backdrop-blur">
         <div className="mx-auto grid max-w-7xl items-center gap-4 px-6 py-4 md:grid-cols-3 md:px-10">
           <nav className="hidden items-center gap-8 text-sm font-medium uppercase tracking-[0.12em] text-[#2B2B2B] md:flex">
             <a href="#">Inicio</a>
@@ -79,18 +79,39 @@ export default function Home() {
             />
           </div>
 
-          <div className="flex items-center justify-center gap-6 text-sm font-medium uppercase tracking-[0.12em] text-[#2B2B2B] md:justify-end">
-            <button className="hidden md:inline">Cuenta</button>
-            <button aria-label="Buscar" className="text-xl">⌕</button>
-            <button aria-label="Favoritos" className="text-xl">♡</button>
-            <a
-              href="#productos"
+          <div className="flex items-center justify-center gap-5 text-[#2B2B2B] md:justify-end">
+            <button className="hidden text-sm font-medium uppercase tracking-[0.12em] md:inline">
+              Cuenta
+            </button>
+
+            <button aria-label="Buscar" className="rounded-full p-2 transition hover:bg-white focus:outline-none focus:ring-0">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20L16.5 16.5" />
+              </svg>
+            </button>
+
+            <button aria-label="Favoritos" className="rounded-full p-2 transition hover:bg-white focus:outline-none focus:ring-0">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M20.5 8.5C20.5 14 12 20 12 20S3.5 14 3.5 8.5C3.5 5.7 5.4 4 7.8 4C9.4 4 10.8 4.9 12 6.3C13.2 4.9 14.6 4 16.2 4C18.6 4 20.5 5.7 20.5 8.5Z" />
+              </svg>
+            </button>
+
+            <button
               aria-label="Carrito"
-              className="flex items-center gap-2 text-xl"
+              onClick={() => {
+                if (cart.length > 0) setShowCheckout(true);
+              }}
+              className="relative rounded-full p-2 transition hover:bg-white focus:outline-none focus:ring-0"
             >
-              🛒
-              <span className="text-sm">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
-            </a>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M6 7H18L17 20H7L6 7Z" />
+                <path d="M9 7C9 4.8 10.2 3.5 12 3.5C13.8 3.5 15 4.8 15 7" />
+              </svg>
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#2B2B2B] px-1 text-[11px] text-white">
+                {cart.reduce((sum, item) => sum + item.quantity, 0)}
+              </span>
+            </button>
           </div>
         </div>
       </header>
@@ -129,7 +150,7 @@ export default function Home() {
 
         <div className="relative">
           <div className="rounded-[2rem] border border-[#C8B6A8] bg-white/60 p-8 shadow-sm">
-            <div className="flex aspect-square items-center justify-center rounded-[1.5rem] bg-[#F7F1EC]">
+            <div className="flex aspect-square items-center justify-center rounded-[1.5rem] bg-[#F4EEE6]">
               <div className="text-center">
                 <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
                   Plata 925 · Acero · Artesanal
@@ -172,7 +193,7 @@ export default function Home() {
               key={product.id}
               className="group rounded-[1.7rem] border border-[#E6E3E0] bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
-              <div className="flex aspect-square items-center justify-center rounded-[1.3rem] bg-[#FAF6F2]">
+              <div className="flex aspect-square items-center justify-center rounded-[1.3rem] bg-[#FBF7F0]">
                 {product.images?.[0]?.src ? (
                   <img
                     src={product.images[0].src}
@@ -241,41 +262,6 @@ export default function Home() {
         </div>
       </section>
 
-      <aside className="fixed bottom-5 right-5 z-40 w-[320px] rounded-[1.5rem] border border-[#C8B6A8] bg-white p-5 shadow-xl">
-        <h4 className="text-lg font-semibold">Carrito</h4>
-
-        {cart.length === 0 ? (
-          <p className="mt-2 text-sm text-[#6b625d]">
-            Todavía no agregaste productos.
-          </p>
-        ) : (
-          <>
-            <div className="mt-4 space-y-2">
-              {cart.map((item) => (
-                <div key={item.id} className="flex justify-between text-sm">
-                  <span>
-                    {item.name} x{item.quantity}
-                  </span>
-                  <strong>$ {item.price * item.quantity}</strong>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 flex justify-between border-t border-[#E6E3E0] pt-3">
-              <span>Total</span>
-              <strong>$ {total}</strong>
-            </div>
-
-            <button
-              onClick={() => setShowCheckout(true)}
-              className="mt-4 w-full rounded-full bg-[#2B2B2B] px-5 py-3 text-sm font-semibold text-white"
-            >
-              Finalizar compra
-            </button>
-          </>
-        )}
-      </aside>
-
       {showCheckout && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2B2B]/50 px-4">
           <div className="w-full max-w-md rounded-[2rem] bg-white p-6 shadow-xl">
@@ -296,7 +282,7 @@ export default function Home() {
                     <option>Efectivo al retirar</option>
                   </select>
 
-                  <div className="rounded-2xl bg-[#FAF6F2] p-4 text-sm">
+                  <div className="rounded-2xl bg-[#FBF7F0] p-4 text-sm">
                     <p className="font-semibold">Total estimado: $ {total}</p>
                     <p className="mt-1 text-[#6b625d]">
                       Demo funcional: no procesa pagos reales.
