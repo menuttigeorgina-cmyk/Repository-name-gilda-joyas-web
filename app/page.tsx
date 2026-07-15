@@ -149,27 +149,40 @@ export default function Home() {
         </div>
 
         <div className="relative">
-          <div className="rounded-[2rem] border border-[#C8B6A8] bg-white/60 p-8 shadow-sm">
-            <div className="flex aspect-square items-center justify-center rounded-[1.5rem] bg-[#F4EEE6]">
-              <div className="text-center">
+          <div className="rounded-[2rem] border border-[#C8B6A8] bg-white p-8 shadow-sm">
+            <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[1.5rem] bg-[#F4EEE6] p-8">
+              <div className="absolute right-8 top-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#C8B6A8]/50 text-4xl text-[#C8B6A8]/70">
+                ✦
+              </div>
+
+              <div>
                 <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
                   Plata 925 · Acero · Artesanal
                 </p>
-                <div className="mx-auto mt-10 flex h-28 w-28 items-center justify-center rounded-full border border-[#C8B6A8] text-6xl text-[#C8B6A8]">
-                  ✦
-                </div>
-                <p className="mt-10 font-serif text-4xl text-[#2B2B2B]">
-                  Detalles que enamoran
+              </div>
+
+              <div>
+                <p className="max-w-sm font-serif text-5xl leading-tight text-[#2B2B2B]">
+                  Detalles que acompañan tu forma de brillar.
                 </p>
+                <p className="mt-5 max-w-sm text-sm leading-6 text-[#6b625d]">
+                  Piezas simples, versátiles y auténticas pensadas para todos los días.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <span className="rounded-full border border-[#C8B6A8] bg-white/60 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#6b625d]">
+                  Simple
+                </span>
+                <span className="rounded-full border border-[#C8B6A8] bg-white/60 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#6b625d]">
+                  Versátil
+                </span>
+                <span className="rounded-full border border-[#C8B6A8] bg-white/60 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#6b625d]">
+                  Auténtica
+                </span>
               </div>
             </div>
           </div>
-
-          <img
-            src="/brand/GIVEMdestello.svg"
-            alt=""
-            className="absolute -right-2 top-10 h-8 w-8"
-          />
         </div>
       </section>
 
@@ -182,8 +195,8 @@ export default function Home() {
             <h2 className="mt-3 font-serif text-5xl">Productos destacados</h2>
           </div>
           <p className="max-w-md text-sm leading-6 text-[#6b625d]">
-            Catálogo conectado a WooCommerce. La compra se simula dentro de la web
-            para representar el flujo de pedido sin procesar pagos reales.
+            Una selección de piezas simples, versátiles y auténticas para todos los días.
+            Elegí tus favoritas y armá tu pedido de forma simple.
           </p>
         </div>
 
