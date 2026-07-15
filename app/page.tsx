@@ -73,86 +73,113 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#fff8f8] text-[#2d2929]">
-      <section className="px-6 py-6 md:px-16">
-        <nav className="flex items-center justify-between">
+    <main className="min-h-screen bg-[linear-gradient(135deg,#fffaf7_0%,#fdf4ee_50%,#fcf1ef_100%)] text-[#2d2929]">
+      <section className="px-6 py-6 md:px-16 md:py-8">
+        <nav className="flex items-center justify-between rounded-full border border-[#efe0d7] bg-white/80 px-4 py-3 shadow-[0_8px_30px_rgba(94,62,49,0.06)] backdrop-blur">
           <div>
-            <p className="text-xs tracking-[0.35em] text-[#c98292]">GIVEM</p>
-            <h1 className="text-2xl font-semibold">Joyas</h1>
+            <p className="text-[10px] tracking-[0.4em] text-[#b88b3c]">GIVEM</p>
+            <h1 className="text-xl font-semibold tracking-[0.02em]">Joyas</h1>
           </div>
           <a
             href="https://www.instagram.com/gvmjoyas/"
             target="_blank"
-            className="rounded-full border border-[#e8c6cc] px-4 py-2 text-sm"
+            className="rounded-full border border-[#e8d4c8] bg-[#fffaf6] px-4 py-2 text-sm text-[#5f4d45] transition hover:border-[#d7b18d] hover:bg-[#fcefe8]"
           >
             Instagram
           </a>
         </nav>
 
-        <div className="mt-14 grid gap-10 md:grid-cols-2 md:items-center">
-          <div>
-            <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#c98292]">
+        <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#f0d8c5] bg-[#fff8f2] px-3 py-1.5 text-sm text-[#a36f4b]">
+              <span className="h-2 w-2 rounded-full bg-[#d8aa5a]"></span>
               Ecommerce con IA
-            </p>
-            <h2 className="text-5xl font-semibold leading-tight md:text-6xl">
+            </div>
+            <h2 className="mt-5 text-4xl font-semibold leading-tight text-[#2d2929] sm:text-5xl lg:text-6xl">
               Joyas que te acompañan y te hacen brillar.
             </h2>
-            <p className="mt-5 max-w-xl text-lg text-[#6f6060]">
+            <p className="mt-5 max-w-xl text-lg leading-8 text-[#6f6060]">
               Tienda online de joyas delicadas, modernas y versátiles. Comprá
-              desde el catálogo y finalizá tu pedido por WhatsApp.
+              desde el catálogo y finalizá tu pedido con el asesoramiento de
+              GIVEM.
             </p>
-            <a
-              href="#productos"
-              className="mt-8 inline-block rounded-full bg-[#d98ca0] px-6 py-3 text-white shadow-sm"
-            >
-              Ver productos
-            </a>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#productos"
+                className="inline-block rounded-full bg-[#d98ca0] px-6 py-3 text-white shadow-sm transition hover:bg-[#c97c92]"
+              >
+                Ver productos
+              </a>
+              <p className="rounded-full border border-[#eadfd8] bg-white/70 px-4 py-3 text-sm text-[#7b6c63]">
+                Envíos y asesoramiento personalizados
+              </p>
+            </div>
           </div>
 
-          <div className="rounded-[2rem] bg-white p-8 shadow-sm">
-            <div className="flex aspect-square items-center justify-center rounded-[1.5rem] bg-[#f5d8de] text-8xl">
+          <div className="rounded-[2rem] border border-[#f2e4dc] bg-white/80 p-5 shadow-[0_20px_60px_rgba(112,80,60,0.08)] backdrop-blur">
+            <div className="flex aspect-square items-center justify-center rounded-[1.5rem] bg-[radial-gradient(circle_at_top_left,_#fbe9e1_0%,_#f7e2d7_35%,_#f5d9de_100%)] text-8xl shadow-inner">
               ✨
+            </div>
+            <div className="mt-4 flex items-center justify-between rounded-2xl border border-[#f2e4dc] bg-[#fffaf7] px-4 py-3 text-sm text-[#7a655f]">
+              <span>Diseño delicado y versátil</span>
+              <span className="font-semibold text-[#b88b3c]">Nueva colección</span>
             </div>
           </div>
         </div>
       </section>
 
       <section id="productos" className="px-6 py-14 md:px-16">
-        <h3 className="text-3xl font-semibold">Productos destacados</h3>
-        <p className="mt-2 text-[#6f6060]">
-          Catálogo conectado con WooCommerce.
-        </p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.35em] text-[#b88b3c]">
+              Catálogo
+            </p>
+            <h3 className="text-3xl font-semibold text-[#2d2929]">
+              Productos destacados
+            </h3>
+          </div>
+          <p className="text-[#6f6060]">Catálogo conectado con WooCommerce.</p>
+        </div>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product) => (
             <article
               key={product.id}
-              className="rounded-3xl bg-white p-4 shadow-sm transition hover:-translate-y-1"
+              className="rounded-[1.75rem] border border-[#f0e1da] bg-[#fffdfa] p-4 shadow-[0_10px_35px_rgba(120,90,70,0.06)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_45px_rgba(120,90,70,0.12)]"
             >
-              <div className="flex aspect-square items-center justify-center rounded-2xl bg-[#f6e4e8] text-5xl">
+              <div className="flex aspect-square items-center justify-center rounded-[1.4rem] bg-[linear-gradient(135deg,_#fbe9e4_0%,_#f7e2d7_100%)] text-5xl">
                 {product.images?.[0]?.src ? (
                   <img
                     src={product.images[0].src}
                     alt={product.name}
-                    className="h-full w-full rounded-2xl object-cover"
+                    className="h-full w-full rounded-[1.4rem] object-cover"
                   />
                 ) : (
                   "💍"
                 )}
               </div>
 
-              <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[#c98292]">
+              <p className="mt-4 text-[11px] uppercase tracking-[0.25em] text-[#b88b3c]">
                 {product.categories?.[0]?.name}
               </p>
-              <h4 className="mt-1 text-lg font-semibold">{product.name}</h4>
-              <p className="mt-2 min-h-12 text-sm text-[#6f6060]">
+              <h4 className="mt-2 text-lg font-semibold text-[#2d2929]">
+                {product.name}
+              </h4>
+              <p className="mt-2 min-h-12 text-sm leading-6 text-[#6f6060]">
                 {cleanHtml(product.short_description)}
               </p>
-              <div className="mt-4 flex items-center justify-between">
-                <strong>$ {product.price}</strong>
+              <div className="mt-4 flex items-center justify-between border-t border-[#f4e7de] pt-4">
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7767]">
+                    Precio
+                  </p>
+                  <strong className="text-lg text-[#2d2929]">
+                    $ {product.price}
+                  </strong>
+                </div>
                 <button
                   onClick={() => addToCart(product)}
-                  className="rounded-full bg-[#2d2929] px-4 py-2 text-sm text-white"
+                  className="rounded-full bg-[#2d2929] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-[#3f3532]"
                 >
                   Agregar
                 </button>
@@ -162,8 +189,8 @@ export default function Home() {
         </div>
       </section>
 
-      <aside className="fixed bottom-5 right-5 w-[320px] rounded-3xl bg-white p-5 shadow-xl">
-        <h4 className="text-lg font-semibold">Carrito</h4>
+      <aside className="fixed bottom-5 right-5 z-40 w-[320px] rounded-[1.75rem] border border-[#f0e1da] bg-[#fffdfa] p-5 shadow-[0_20px_55px_rgba(72,45,40,0.15)]">
+        <h4 className="text-lg font-semibold text-[#2d2929]">Carrito</h4>
 
         {cart.length === 0 ? (
           <p className="mt-2 text-sm text-[#6f6060]">
