@@ -7,124 +7,165 @@ type Message = {
   text: string;
 };
 
-const answers = {
-  materiales:
-    "Para uso diario, las opciones más prácticas suelen ser el acero quirúrgico, el acero blanco o el acero dorado, porque resisten mejor el uso frecuente. La plata 925 es más delicada y elegante, pero puede oscurecerse con el tiempo y requiere limpieza.",
-  piel:
-    "Si tenés piel sensible, lo más recomendable es elegir plata 925 o acero quirúrgico. Son materiales que suelen tolerarse mejor, aunque siempre conviene revisar la composición exacta de cada pieza.",
-  cuidados:
-    "Para conservar tus joyas, guardalas en un lugar seco y separadas entre sí. Evitá perfumes, cremas, agua de pileta, agua de mar y productos químicos. También es recomendable limpiarlas suavemente con un paño seco después del uso.",
-  regalo:
-    "Para regalar, las opciones más seguras suelen ser aros, collares o pulseras regulables, porque no dependen tanto del talle. Si querés regalar un anillo, lo ideal es saber la medida o elegir un diseño ajustable.",
-  talles:
-    "Para saber el talle de un anillo, podés medir el diámetro interno de un anillo que ya uses y compararlo con una guía de talles. Si no estás segura, conviene consultar antes de comprar.",
-  envios:
-    "Las entregas se coordinan según zona y disponibilidad. Al finalizar el pedido podés indicar tu zona para que GILDA Joyas confirme la mejor opción de entrega.",
-  pagos:
-    "En esta demo el pedido se simula dentro de la web. En una versión real, GILDA Joyas confirmaría el medio de pago disponible antes de cerrar la compra.",
-  stock:
-    "El stock se confirma antes de finalizar la compra real. Esto permite validar disponibilidad, material, color o talle antes de coordinar el pago y la entrega.",
-  cambios:
-    "Las condiciones de cambio deben confirmarse con la marca. En general, se recomienda conservar el producto sin uso y con su packaging. Esta respuesta se completará con la política real de GILDA Joyas.",
-};
+const quickAnswers = [
+  {
+    q: "Pagos",
+    a: "Aceptamos efectivo, transferencia, billeteras virtuales, débito y tarjeta de crédito en cuotas. En efectivo o transferencia tenés 15% de descuento.",
+  },
+  {
+    q: "Envíos",
+    a: "Hacemos entregas en Santa Fe Capital y alrededores, previa coordinación y con costo según zona. También enviamos por Correo Argentino al resto del país.",
+  },
+  {
+    q: "Cambios",
+    a: "Los cambios se aceptan dentro de las 24 hs de recibido el producto y solo por fallas en el material. Aros, argollas y piercings no tienen cambio por higiene, salvo falla.",
+  },
+  {
+    q: "Cuidados",
+    a: "Evitá perfumes, transpiración, jabones, cosméticos y productos de limpieza. La plata puede oscurecerse, pero recupera brillo con limpieza adecuada.",
+  },
+  {
+    q: "Materiales",
+    a: "Trabajamos con plata 925, acero quirúrgico, acero blanco, acero dorado y piezas artesanales. El acero quirúrgico es inalterable y de alta durabilidad.",
+  },
+  {
+    q: "Regalo",
+    a: "Sí, si la compra es para regalo preparamos un packaging especial. Puede ser bolsita, cajita o sobre, según el tipo de producto.",
+  },
+];
 
-function getBotResponse(message: string) {
-  const text = message.toLowerCase();
+function getBotAnswer(question: string) {
+  const text = question.toLowerCase();
 
-  if (text.includes("piel") || text.includes("sensible") || text.includes("alerg") || text.includes("delicada")) return answers.piel;
-  if (text.includes("negro") || text.includes("oscure") || text.includes("oxida") || text.includes("mancha")) return answers.materiales;
-  if (text.includes("material") || text.includes("plata") || text.includes("acero") || text.includes("dorado")) return answers.materiales;
-  if (text.includes("cuidado") || text.includes("limpiar") || text.includes("agua") || text.includes("perfume")) return answers.cuidados;
-  if (text.includes("regalo") || text.includes("cumple") || text.includes("packaging")) return answers.regalo;
-  if (text.includes("talle") || text.includes("medida") || text.includes("anillo")) return answers.talles;
-  if (text.includes("envio") || text.includes("envío") || text.includes("entrega") || text.includes("zona")) return answers.envios;
-  if (text.includes("pago") || text.includes("transferencia") || text.includes("efectivo") || text.includes("cuotas")) return answers.pagos;
-  if (text.includes("stock") || text.includes("disponible") || text.includes("hay")) return answers.stock;
-  if (text.includes("cambio") || text.includes("devolucion") || text.includes("fallado")) return answers.cambios;
+  if (text.includes("comprar") || text.includes("pedido") || text.includes("carrito") || text.includes("agregar")) {
+    return "Para comprar, elegí el producto que te guste, tocá “Agregar”, revisá el carrito y completá tus datos. Después GILDA Joyas se contacta por WhatsApp para coordinar pago y entrega.";
+  }
 
-  return "Puedo orientarte sobre materiales, cuidados, talles, regalos, envíos, pagos, stock o cambios. También podés elegir una pregunta frecuente para recibir una respuesta rápida.";
+  if (text.includes("stock") || text.includes("disponible") || text.includes("hay")) {
+    return "El stock puede variar según el producto. Podés agregar la pieza al carrito y, al confirmar el pedido, GILDA Joyas revisa la disponibilidad y se contacta por WhatsApp.";
+  }
+
+  if (text.includes("hombre") || text.includes("unisex")) {
+    return "Algunas piezas pueden usarse como unisex, especialmente pulseras, cadenas y accesorios de acero o estilo artesanal. Te recomiendo revisar las categorías de pulseras y accesorios boho/artesanales.";
+  }
+
+  if (text.includes("pulsera") || text.includes("pulseras")) {
+    return "Tenemos pulseras en distintos estilos y materiales, incluyendo acero, plata y piezas artesanales. Podés filtrarlas desde la categoría Pulseras en el catálogo.";
+  }
+
+  if (text.includes("anillo") || text.includes("anillos")) {
+    return "Podés ver los anillos desde la categoría Anillos del catálogo. Hay opciones en plata 925, acero y otros materiales según disponibilidad.";
+  }
+
+  if (text.includes("aro") || text.includes("aros") || text.includes("argolla") || text.includes("piercing")) {
+    return "Tenemos aros, argollas y piercings según stock. Por higiene, estos productos no tienen cambio, salvo que presenten una falla en el material.";
+  }
+
+  if (text.includes("collar") || text.includes("cadena") || text.includes("dije")) {
+    return "Podés ver collares, cadenas y dijes desde sus categorías en el catálogo. Hay opciones simples, modernas y también piezas más artesanales.";
+  }
+
+  if (text.includes("pago") || text.includes("transferencia") || text.includes("efectivo") || text.includes("tarjeta") || text.includes("cuota") || text.includes("mercado pago") || text.includes("billetera")) {
+    return "Aceptamos efectivo, transferencia, billeteras virtuales, tarjeta de débito y tarjeta de crédito en cuotas. En efectivo o transferencia tenés 15% de descuento.";
+  }
+
+  if (text.includes("descuento")) {
+    return "Sí, abonando en efectivo o por transferencia tenés 15% de descuento.";
+  }
+
+  if (text.includes("envio") || text.includes("envío") || text.includes("entrega") || text.includes("correo") || text.includes("santa fe")) {
+    return "Hacemos entregas en Santa Fe Capital y alrededores, previa coordinación y con costo según zona. También enviamos por Correo Argentino al resto del país.";
+  }
+
+  if (text.includes("cambio") || text.includes("devolucion") || text.includes("devolución") || text.includes("falla")) {
+    return "Los cambios se aceptan dentro de las 24 hs de recibido el producto y solo por fallas en el material. Aros, argollas y piercings no tienen cambio por higiene, salvo falla.";
+  }
+
+  if (text.includes("regalo") || text.includes("packaging") || text.includes("cajita") || text.includes("bolsita") || text.includes("sobre")) {
+    return "Sí, si la compra es para regalo preparamos un packaging especial. Puede ser bolsita, cajita o sobre, según el tipo de producto.";
+  }
+
+  if (text.includes("cuidado") || text.includes("limpiar") || text.includes("oscurece") || text.includes("oscurecer") || text.includes("brillo")) {
+    return "Recomendamos evitar perfumes, transpiración, jabones, cosméticos y productos de limpieza. La plata puede oscurecerse según el pH de la piel, pero con limpieza adecuada puede recuperar su brillo.";
+  }
+
+  if (text.includes("plata 925") || text.includes("plata")) {
+    return "La plata 925 puede oscurecerse con el tiempo por el pH de la piel, perfumes, transpiración o productos de limpieza. Es normal y puede recuperar su brillo con limpieza adecuada.";
+  }
+
+  if (text.includes("acero quirurgico") || text.includes("acero quirúrgico")) {
+    return "El acero quirúrgico es un material inalterable y de alta durabilidad. Es una buena opción si buscás una pieza resistente.";
+  }
+
+  if (text.includes("acero blanco")) {
+    return "El acero blanco tiene un baño de plata sobre acero quirúrgico. Para cuidar su apariencia, evitá perfumes, transpiración, jabones, lavandina y sustancias corrosivas.";
+  }
+
+  if (text.includes("acero dorado") || text.includes("gold") || text.includes("rose")) {
+    return "Las piezas doradas, rose o gold suelen tener baño de color. Recomendamos no usarlas para bañarse, hacer deporte o ir al gimnasio, y evitar contacto con cosméticos o químicos.";
+  }
+
+  if (text.includes("material") || text.includes("piel sensible") || text.includes("alergia")) {
+    return "La elección del material depende de cada piel. Cada persona puede adaptarse mejor a plata, acero quirúrgico u otros materiales según su experiencia personal.";
+  }
+
+  return "Puedo ayudarte con pagos, envíos, cambios, cuidados, materiales, stock, regalos y cómo comprar. También podés buscar por categoría en el catálogo.";
 }
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [showFaqs, setShowFaqs] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       from: "bot",
-      text: "Hola ✨ Soy el asistente virtual de GILDA Joyas. Estoy para ayudarte a elegir mejor antes de comprar.",
+      text: "Hola, soy tu asistente de GILDA. Podés preguntarme sobre pagos, envíos, cambios, cuidados o regalos.",
     },
   ]);
 
-  function addConversation(label: string, answer: string) {
-    setMessages((current) => [
-      ...current,
-      { from: "user", text: label },
-      { from: "bot", text: answer },
-    ]);
-    setShowFaqs(false);
-  }
-
   function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!input.trim()) return;
 
-    const userText = input;
+    const question = input.trim();
+    if (!question) return;
+
     setMessages((current) => [
       ...current,
-      { from: "user", text: userText },
-      { from: "bot", text: getBotResponse(userText) },
+      { from: "user", text: question },
+      { from: "bot", text: getBotAnswer(question) },
     ]);
+
     setInput("");
   }
 
-  const faqs = [
-    ["Materiales", answers.materiales],
-    ["Piel sensible", answers.piel],
-    ["Cuidados", answers.cuidados],
-    ["Regalos", answers.regalo],
-    ["Talles", answers.talles],
-    ["Envíos", answers.envios],
-    ["Pagos", answers.pagos],
-    ["Stock", answers.stock],
-    ["Cambios", answers.cambios],
-  ];
+  function addQuickAnswer(answer: string) {
+    setMessages((current) => [...current, { from: "bot", text: answer }]);
+  }
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
       {open && (
-        <div className="mb-4 flex h-[560px] w-[390px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-[1.7rem] border border-[#C8B6A8] bg-white shadow-2xl">
-          <div className="border-b border-[#E6E3E0] bg-white px-5 py-4">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FBF7F0]">
-                  <img src="/brand/gildajoyaslogo.svg" alt="" className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-[#2B2B2B]">Asistente GILDA</h4>
-                  <p className="mt-1 text-xs text-[#A9A5A0]">
-                    Ayuda para elegir y comprar
-                  </p>
-                </div>
-              </div>
+        <div className="mb-3 w-[310px] rounded-[18px] border border-[#D8C6B7] bg-[#FFFCF8] p-4 shadow-[0_18px_45px_rgba(80,55,40,0.18)]">
+          <div className="relative mb-4 text-center">
+            <h3 className="font-serif text-xl text-[#2B2B2B]">Tu asistente</h3>
+            <p className="text-xs text-[#7B7068]">GILDA Joyas</p>
 
-              <button
-                onClick={() => setOpen(false)}
-                className="text-lg text-[#A9A5A0]"
-              >
-                ✕
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="absolute right-0 top-0 text-xl leading-none text-[#7B7068] hover:text-[#2B2B2B]"
+            >
+              ×
+            </button>
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto bg-[#FBF7F0] px-5 py-4">
+          <div className="max-h-[210px] space-y-2 overflow-y-auto pr-1">
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`max-w-[86%] rounded-2xl px-4 py-3 text-sm leading-5 ${
+                className={`rounded-[12px] px-3 py-2 text-xs leading-5 ${
                   message.from === "user"
-                    ? "ml-auto bg-[#2B2B2B] text-white"
-                    : "mr-auto bg-white text-[#5f5752]"
+                    ? "mx-auto max-w-[88%] bg-[#2B2B2B] text-center text-white"
+                    : "mx-auto max-w-[88%] bg-[#F1E8DF] text-center text-[#2B2B2B]"
                 }`}
               >
                 {message.text}
@@ -132,63 +173,53 @@ export default function Chatbot() {
             ))}
           </div>
 
-          <div className="border-t border-[#E6E3E0] bg-white px-4 py-3">
-            <button
-              onClick={() => setShowFaqs(!showFaqs)}
-              className="mb-3 flex w-full items-center justify-between rounded-2xl border border-[#E6E3E0] px-4 py-3 text-left text-sm font-medium text-[#2B2B2B]"
-            >
-              Preguntas frecuentes
-              <span className="text-[#A9A5A0]">{showFaqs ? "−" : "+"}</span>
-            </button>
-
-            {showFaqs && (
-              <div className="mb-3 grid grid-cols-2 gap-2">
-                {faqs.map(([label, answer]) => (
-                  <button
-                    key={label}
-                    onClick={() => addConversation(label, answer)}
-                    className="rounded-full border border-[#E6E3E0] px-3 py-2 text-xs text-[#5f5752] transition hover:border-[#C8B6A8] focus:outline-none focus:ring-0"
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <form onSubmit={sendMessage} className="flex gap-2">
-              <input
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                placeholder="Escribí tu consulta..."
-                className="min-w-0 flex-1 rounded-full border border-[#C8B6A8] px-4 py-3 text-sm outline-none focus:ring-0"
-              />
-              <button className="rounded-full bg-[#2B2B2B] px-5 py-3 text-sm text-white">
-                Enviar
+          <div className="mt-3 flex flex-wrap justify-center gap-2">
+            {quickAnswers.map((item) => (
+              <button
+                key={item.q}
+                type="button"
+                onClick={() => addQuickAnswer(item.a)}
+                className="rounded-full border border-[#D8C6B7] px-3 py-1 text-[11px] text-[#6b625d] transition hover:bg-[#E9DDD2] hover:text-[#2B2B2B]"
+              >
+                {item.q}
               </button>
-            </form>
-
-            <p className="mt-2 text-[11px] leading-4 text-[#A9A5A0]">
-              Demo con respuestas predefinidas. Las políticas finales se cargarán con datos reales de la marca.
-            </p>
+            ))}
           </div>
+
+          <form onSubmit={sendMessage} className="mt-3 flex gap-2">
+            <input
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Escribí tu consulta..."
+              className="min-w-0 flex-1 rounded-[10px] border border-[#D8C6B7] bg-transparent px-3 py-2 text-center text-xs outline-none placeholder:text-[#A9A5A0] focus:border-[#2B2B2B]"
+            />
+
+            <button
+              type="submit"
+              className="rounded-[10px] bg-[#2B2B2B] px-3 py-2 text-xs font-medium text-white"
+            >
+              Enviar
+            </button>
+          </form>
         </div>
       )}
 
       <button
+        type="button"
         onClick={() => setOpen(!open)}
-        className="flex min-w-[280px] items-center gap-4 rounded-2xl border border-[#C8B6A8] bg-white px-5 py-4 text-left shadow-2xl transition hover:-translate-y-0.5 hover:shadow-[0_18px_45px_rgba(43,43,43,0.16)] focus:outline-none focus:ring-0 focus:ring-0"
+        className={`flex w-[310px] items-center gap-3 rounded-[18px] border border-[#D8C6B7] bg-[#FFFCF8] px-4 py-3 shadow-[0_12px_30px_rgba(80,55,40,0.14)] transition hover:-translate-y-0.5 hover:opacity-100 ${
+          open ? "opacity-100" : "opacity-75"
+        }`}
       >
-        <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#FBF7F0]">
-          <img src="/brand/gildajoyaslogo.svg" alt="" className="h-10 w-10 object-contain" />
-        </span>
-        <span className="flex flex-col items-center leading-tight">
-          <span className="block text-base font-semibold text-[#2B2B2B]">
-            ¿Necesitás ayuda?
-          </span>
-          <span className="mt-1 block text-sm font-medium text-[#8a817c]">
-            Asistente GILDA
-          </span>
-        </span>
+        <img
+          src="/brand/gildajoyasblanco.svg"
+          alt="GILDA"
+          className="h-10 w-10 object-contain"
+        />
+        <div className="text-left">
+          <p className="text-sm font-semibold text-[#2B2B2B]">Tu asistente</p>
+          <p className="text-xs text-[#7B7068]">GILDA</p>
+        </div>
       </button>
     </div>
   );

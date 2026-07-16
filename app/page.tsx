@@ -40,7 +40,29 @@ export default function Home() {
   useEffect(() => {
     fetch("/api/products")
       .then((res) => res.json())
-      .then((data) => setProducts(data));
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProducts(data);
+          return;
+        }
+
+        if (Array.isArray(data.products)) {
+          setProducts(data.products);
+          return;
+        }
+
+        if (Array.isArray(data.data)) {
+          setProducts(data.data);
+          return;
+        }
+
+        console.error("Formato inesperado de productos:", data);
+        setProducts([]);
+      })
+      .catch((error) => {
+        console.error("Error cargando productos:", error);
+        setProducts([]);
+      });
   }, []);
 
   const materialFilters = [
@@ -94,7 +116,9 @@ export default function Home() {
 
         return normalize(text).includes(normalize(searchTerm));
       })
-    : filteredProducts;
+    : filteredProducts.length > 0
+      ? filteredProducts
+      : products;
 
   function addToCart(product: Product) {
     const price = Number(product.price || 0);
@@ -164,10 +188,10 @@ export default function Home() {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <main className="min-h-screen bg-[#FBF7F0] text-[#2B2B2B]">
+    <main className="min-h-screen overflow-x-hidden bg-[#FBF7F0] text-[#2B2B2B]">
       <header className="sticky top-0 z-50 border-b border-[#E8DED5] bg-[#FAF6F2]/95 backdrop-blur-md">
-        <div className="mx-auto grid max-w-7xl grid-cols-3 items-center px-6 py-3 md:px-10">
-          <nav className="hidden items-center gap-8 text-[15px] font-normal text-[#2B2B2B] md:flex">
+        <div className="mx-auto grid max-w-7xl grid-cols-3 items-center px-5 py-2 md:px-8 lg:px-10">
+          <nav className="hidden items-center gap-6 text-[14px] font-normal text-[#2B2B2B] md:flex lg:gap-8 lg:text-[15px]">
             <a href="#" className="transition hover:text-[#9C7F6C]">
               Inicio
             </a>
@@ -186,16 +210,16 @@ export default function Home() {
               <img
                 src="/brand/gildajoyasblanco.svg"
                 alt="GILDA Joyas"
-                className="h-24 w-24 object-contain md:h-28 md:w-28"
+                className="h-16 w-16 object-contain md:h-20 md:w-20 lg:h-24 lg:w-24"
               />
             </a>
           </div>
 
-          <div className="flex items-center justify-end gap-5 text-[#2B2B2B]">
+          <div className="flex items-center justify-end gap-3 text-[#2B2B2B] md:gap-5">
             <button
               type="button"
               onClick={() => setShowAccountNotice(true)}
-              className="hidden text-[15px] font-normal md:inline"
+              className="hidden text-[14px] font-normal md:inline lg:text-[15px]"
             >
               Cuenta
             </button>
@@ -245,7 +269,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="grid items-center gap-10 px-6 pb-14 pt-8 md:px-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:pl-10 lg:pr-0">
+      <section className="grid items-center gap-8 px-6 pb-10 pt-8 md:grid-cols-[0.85fr_1.15fr] md:px-8 lg:gap-10 lg:pl-10 lg:pr-0">
         <div className="max-w-xl">
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#C8B6A8] px-4 py-2 text-xs uppercase tracking-[0.25em] text-[#6b625d]">
             <span className="h-2 w-2 rounded-full bg-[#E79CB3]" />
@@ -278,7 +302,7 @@ export default function Home() {
         </div>
 
         <div className="relative lg:justify-self-end lg:w-full">
-          <div className="relative h-[380px] overflow-hidden rounded-[2rem] border-2 border-[#BFAE9E] shadow-[0_10px_30px_rgba(0,0,0,0.05)] md:h-[460px] lg:h-[560px] lg:rounded-l-[2rem] lg:rounded-r-none">
+          <div className="relative h-[300px] overflow-hidden rounded-[1.5rem] border-2 border-[#BFAE9E] shadow-[0_10px_30px_rgba(0,0,0,0.05)] sm:h-[340px] md:h-[370px] lg:h-[560px] lg:rounded-l-[2rem] lg:rounded-r-none">
             <img
               src="/brand/herogchic.png"
               alt="Editorial GILDA Joyas"
@@ -294,7 +318,7 @@ export default function Home() {
             Catálogo
           </p>
 
-          <h2 className="mt-3 font-serif text-5xl md:text-6xl">
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl">
             Productos destacados
           </h2>
 
@@ -362,7 +386,7 @@ export default function Home() {
             {visibleProducts.map((product) => (
               <article
                 key={product.id}
-                className="group w-full bg-transparent sm:w-[calc(50%-14px)] lg:w-[calc(25%-21px)]"
+                className="group w-[calc(50%-14px)] bg-transparent md:w-[calc(25%-21px)]"
               >
                 <button
                   type="button"
@@ -426,55 +450,85 @@ export default function Home() {
 
       <section
         id="como-comprar"
-        className="mx-auto grid max-w-7xl gap-6 px-6 py-12 md:grid-cols-3 md:px-10"
+        className="mx-auto max-w-7xl px-6 py-16 md:px-10"
       >
-        {[
-          ["01", "Elegí tus piezas", "Explorá el catálogo y seleccioná las joyas que más conectan con tu estilo."],
-          ["02", "Armá tu pedido", "Completá tus datos y dejá tu zona de entrega para poder coordinar disponibilidad."],
-          ["03", "Coordiná la entrega", "GILDA Joyas confirma el pedido, el stock y la forma de entrega más conveniente."],
-        ].map(([number, title, text]) => (
-          <div key={number} className="rounded-[1.5rem] border border-[#C8B6A8] bg-white/50 p-6">
-            <p className="text-xs uppercase tracking-[0.3em] text-[#A9A5A0]">{number}</p>
-            <h3 className="mt-5 text-xl font-semibold">{title}</h3>
-            <p className="mt-3 text-sm leading-6 text-[#6b625d]">{text}</p>
-          </div>
-        ))}
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
+            Cómo comprar
+          </p>
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl">
+            Comprar es muy fácil
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#6b625d]">
+            Elegí tus joyas favoritas, agregalas al carrito y completá tus datos.
+            Luego nos contactamos por WhatsApp para coordinar el pago y la entrega.
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-3">
+          {[
+            ["01", "Elegí tus piezas", "Explorá el catálogo y tocá “Agregar” en los productos que quieras sumar a tu pedido."],
+            ["02", "Revisá tu carrito", "Entrá a “Mi carrito”, completá tu mail y tus datos de contacto con atención."],
+            ["03", "Coordiná la entrega", "Seleccioná la forma de entrega y el método de pago. Luego GILDA Joyas se contacta por WhatsApp para coordinar."],
+          ].map(([number, title, text]) => (
+            <div key={number} className="border border-[#E5DAD1] bg-white/35 p-7 text-center">
+              <p className="text-xs uppercase tracking-[0.3em] text-[#A9A5A0]">{number}</p>
+              <h3 className="mt-5 text-xl font-semibold">{title}</h3>
+              <p className="mt-3 text-sm leading-6 text-[#6b625d]">{text}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      <section id="materiales" className="mx-auto max-w-7xl px-6 py-12 md:px-10">
-        <div className="rounded-[2rem] border border-[#E6E3E0] bg-white/65 p-6 md:p-8">
-          <div className="grid gap-6 md:grid-cols-[0.75fr_1.25fr] md:items-stretch">
-            <div className="flex flex-col items-center justify-center rounded-[1.5rem] bg-[#2B2B2B] p-7 text-center text-white">
-              <p className="text-xs uppercase tracking-[0.3em] text-[#C8B6A8]">
-                Materiales y cuidados
-              </p>
-              <h2 className="mt-7 max-w-sm font-serif text-4xl leading-tight">
-                Joyas para usar todos los días.
-              </h2>
-            </div>
+      <section
+        id="materiales"
+        className="bg-[#2B2B2B] px-6 py-14 text-[#FAF6F2] md:px-10"
+      >
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto mb-10 max-w-3xl text-center">
+            <p className="text-xs uppercase tracking-[0.35em] text-[#C8B6A8]">
+              Información
+            </p>
+            <h2 className="mt-3 font-serif text-4xl md:text-5xl">
+              Información útil
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#D8CFC8]">
+              Pagos, envíos, cambios y cuidados para comprar con más confianza.
+            </p>
+          </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
-              <article className="rounded-[1.3rem] border border-[#E6E3E0] bg-white/85 p-5">
-                <h3 className="text-base font-semibold text-[#2B2B2B]">Materiales</h3>
-                <p className="mt-3 text-sm leading-6 text-[#5f5752]">
-                  Plata 925, acero blanco, acero dorado, acero quirúrgico y piezas artesanales.
-                </p>
+          <div className="mx-auto grid max-w-5xl gap-x-14 gap-y-8 md:grid-cols-2">
+            {[
+              [
+                "Medios de pago",
+                "Aceptamos efectivo, transferencia bancaria, billeteras virtuales, débito y tarjeta de crédito en cuotas. En efectivo o transferencia tenés 15% de descuento.",
+              ],
+              [
+                "Envíos",
+                "Hacemos entregas en Santa Fe Capital y alrededores, previa coordinación y con costo según zona. También enviamos por Correo Argentino al resto del país.",
+              ],
+              [
+                "Cambios",
+                "Los cambios se aceptan dentro de las 24 horas de recibido el producto y solo por fallas en el material. Aros, argollas y piercings no tienen cambio por higiene, salvo falla.",
+              ],
+              [
+                "Materiales",
+                "Trabajamos con plata 925, acero quirúrgico, acero blanco, acero dorado y piezas artesanales. El acero quirúrgico es inalterable y de alta durabilidad.",
+              ],
+              [
+                "Cuidados",
+                "Evitá perfumes, transpiración, jabones, cosméticos, productos de limpieza o sustancias corrosivas. La plata puede oscurecerse, pero puede recuperar su brillo con limpieza adecuada.",
+              ],
+              [
+                "Packaging para regalo",
+                "Si la compra es para regalo, preparamos un packaging especial: bolsita, cajita o sobre, según el tipo de producto.",
+              ],
+            ].map(([title, text]) => (
+              <article key={title} className="border-t border-white/15 pt-5">
+                <h3 className="text-base font-semibold text-white">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#D8CFC8]">{text}</p>
               </article>
-
-              <article className="rounded-[1.3rem] border border-[#E6E3E0] bg-white/85 p-5">
-                <h3 className="text-base font-semibold text-[#2B2B2B]">Uso diario</h3>
-                <p className="mt-3 text-sm leading-6 text-[#5f5752]">
-                  Diseños cómodos y combinables para acompañar distintos estilos.
-                </p>
-              </article>
-
-              <article className="rounded-[1.3rem] border border-[#E6E3E0] bg-white/85 p-5">
-                <h3 className="text-base font-semibold text-[#2B2B2B]">Cuidados</h3>
-                <p className="mt-3 text-sm leading-6 text-[#5f5752]">
-                  Evitá perfumes, cremas, agua de mar, pileta y productos químicos.
-                </p>
-              </article>
-            </div>
+            ))}
           </div>
         </div>
       </section>
