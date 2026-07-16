@@ -9,6 +9,7 @@ type Product = {
   price: string;
   short_description: string;
   categories: { name: string }[];
+  tags: { name: string }[];
   images: { src: string }[];
 };
 
@@ -25,8 +26,15 @@ function cleanHtml(html: string) {
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [activeCategory, setActiveCategory] = useState("Todos");
+  const [activeType, setActiveType] = useState("Todos");
+  const [showProductMenu, setShowProductMenu] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [favorites, setFavorites] = useState<number[]>([]);
   const [showCheckout, setShowCheckout] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showAccountNotice, setShowAccountNotice] = useState(false);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
 
   useEffect(() => {
@@ -34,6 +42,59 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
+
+  const materialFilters = [
+    "Todos",
+    "Plata 925",
+    "Acero blanco",
+    "Acero dorado",
+    "Boho / Artesanal",
+  ];
+
+  const typeFilters = [
+    "Todos",
+    "Anillos",
+    "Aros",
+    "Pulseras",
+    "Collares y Cadenas",
+    "Dijes",
+    "Tobilleras",
+  ];
+
+  function normalize(value = "") {
+    return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  const filteredProducts = products.filter((product) => {
+    const tags = product.tags?.map((tag) => normalize(tag.name)) || [];
+    const categories = product.categories?.map((category) => normalize(category.name)) || [];
+
+    const matchesMaterial =
+      activeCategory === "Todos"
+        ? true
+        : activeCategory === "Boho / Artesanal"
+          ? tags.includes("boho") || tags.includes("artesanal") || categories.some((category) => category.includes("boho"))
+          : tags.includes(normalize(activeCategory));
+
+    const matchesType =
+      activeType === "Todos"
+        ? true
+        : categories.includes(normalize(activeType));
+
+    return matchesMaterial && matchesType;
+  });
+
+  const visibleProducts = searchTerm.trim()
+    ? products.filter((product) => {
+        const text = [
+          product.name,
+          product.categories?.map((category) => category.name).join(" "),
+          product.tags?.map((tag) => tag.name).join(" "),
+        ].join(" ");
+
+        return normalize(text).includes(normalize(searchTerm));
+      })
+    : filteredProducts;
 
   function addToCart(product: Product) {
     const price = Number(product.price || 0);
@@ -51,6 +112,47 @@ export default function Home() {
 
       return [...current, { id: product.id, name: product.name, price, quantity: 1 }];
     });
+
+    setShowCheckout(true);
+  }
+
+  function submitSearch() {
+    const query = normalize(searchTerm);
+
+    const matchedType = typeFilters.find((filter) =>
+      normalize(filter).includes(query) || query.includes(normalize(filter))
+    );
+
+    const matchedMaterial = materialFilters.find((filter) =>
+      normalize(filter).includes(query) || query.includes(normalize(filter))
+    );
+
+    if (matchedType) {
+      setActiveType(matchedType);
+    }
+
+    if (matchedMaterial) {
+      setActiveCategory(matchedMaterial);
+      setActiveType("Todos");
+    }
+
+    setShowSearch(false);
+    window.location.hash = "productos";
+
+    setTimeout(() => {
+      document.getElementById("productos")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
+  }
+
+  function toggleFavorite(productId: number) {
+    setFavorites((current) =>
+      current.includes(productId)
+        ? current.filter((id) => id !== productId)
+        : [...current, productId]
+    );
   }
 
   function confirmOrder(event: FormEvent<HTMLFormElement>) {
@@ -63,183 +165,263 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#FBF7F0] text-[#2B2B2B]">
-      <header className="sticky top-0 z-30 border-b border-[#E6E3E0] bg-[#FBF7F0]/95 backdrop-blur">
-        <div className="mx-auto grid max-w-7xl items-center gap-4 px-6 py-4 md:grid-cols-3 md:px-10">
-          <nav className="hidden items-center gap-8 text-sm font-medium uppercase tracking-[0.12em] text-[#2B2B2B] md:flex">
-            <a href="#">Inicio</a>
-            <a href="#productos">Productos</a>
-            <a href="#materiales">Información</a>
+      <header className="sticky top-0 z-50 border-b border-[#E8DED5] bg-[#FAF6F2]/95 backdrop-blur-md">
+        <div className="mx-auto grid max-w-7xl grid-cols-3 items-center px-6 py-3 md:px-10">
+          <nav className="hidden items-center gap-8 text-[15px] font-normal text-[#2B2B2B] md:flex">
+            <a href="#" className="transition hover:text-[#9C7F6C]">
+              Inicio
+            </a>
+
+            <a href="#productos" className="transition hover:text-[#9C7F6C]">
+              Productos
+            </a>
+
+            <a href="#materiales" className="transition hover:text-[#9C7F6C]">
+              Nosotras
+            </a>
           </nav>
 
           <div className="flex justify-center">
-            <img
-              src="/brand/gildajoyaslogo.svg"
-              alt="GILDA Joyas"
-              className="h-24 w-24 object-contain md:h-28 md:w-28"
-            />
+            <a href="#" aria-label="Ir al inicio">
+              <img
+                src="/brand/gildajoyasblanco.svg"
+                alt="GILDA Joyas"
+                className="h-24 w-24 object-contain md:h-28 md:w-28"
+              />
+            </a>
           </div>
 
-          <div className="flex items-center justify-center gap-5 text-[#2B2B2B] md:justify-end">
-            <button className="hidden text-sm font-medium uppercase tracking-[0.12em] md:inline">
+          <div className="flex items-center justify-end gap-5 text-[#2B2B2B]">
+            <button
+              type="button"
+              onClick={() => setShowAccountNotice(true)}
+              className="hidden text-[15px] font-normal md:inline"
+            >
               Cuenta
             </button>
 
-            <button aria-label="Buscar" className="rounded-full p-2 transition hover:bg-white focus:outline-none focus:ring-0">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+            <button
+              type="button"
+              aria-label="Buscar"
+              onClick={() => setShowSearch(!showSearch)}
+              className="rounded-full p-2 transition hover:bg-white focus:outline-none focus:ring-0"
+            >
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
                 <circle cx="11" cy="11" r="7" />
                 <path d="M20 20L16.5 16.5" />
               </svg>
             </button>
 
-            <button aria-label="Favoritos" className="rounded-full p-2 transition hover:bg-white focus:outline-none focus:ring-0">
-              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+            <button aria-label="Favoritos" className="relative rounded-full p-2 transition hover:bg-white focus:outline-none focus:ring-0">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                 <path d="M20.5 8.5C20.5 14 12 20 12 20S3.5 14 3.5 8.5C3.5 5.7 5.4 4 7.8 4C9.4 4 10.8 4.9 12 6.3C13.2 4.9 14.6 4 16.2 4C18.6 4 20.5 5.7 20.5 8.5Z" />
               </svg>
+
+              {favorites.length > 0 && (
+                <span className="absolute -right-1 -top-1 rounded-full bg-[#2B2B2B] px-1.5 text-[10px] text-white">
+                  {favorites.length}
+                </span>
+              )}
             </button>
 
             <button
               aria-label="Carrito"
-              onClick={() => {
-                if (cart.length > 0) setShowCheckout(true);
-              }}
+              onClick={() => setShowCheckout(true)}
               className="relative rounded-full p-2 transition hover:bg-white focus:outline-none focus:ring-0"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M6 7H18L17 20H7L6 7Z" />
-                <path d="M9 7C9 4.8 10.2 3.5 12 3.5C13.8 3.5 15 4.8 15 7" />
+              <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M6 7H20L18.5 16H8L6 4H3" />
+                <circle cx="9" cy="20" r="1" />
+                <circle cx="18" cy="20" r="1" />
               </svg>
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#2B2B2B] px-1 text-[11px] text-white">
-                {cart.reduce((sum, item) => sum + item.quantity, 0)}
-              </span>
+
+              {cart.length > 0 && (
+                <span className="absolute -right-1 -top-1 rounded-full bg-[#2B2B2B] px-1.5 text-[10px] text-white">
+                  {cart.length}
+                </span>
+              )}
             </button>
           </div>
         </div>
       </header>
 
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-12 md:grid-cols-2 md:items-center md:px-10 md:py-20">
-        <div>
+      <section className="grid items-center gap-10 px-6 pb-14 pt-8 md:px-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:pl-10 lg:pr-0">
+        <div className="max-w-xl">
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#C8B6A8] px-4 py-2 text-xs uppercase tracking-[0.25em] text-[#6b625d]">
             <span className="h-2 w-2 rounded-full bg-[#E79CB3]" />
             Nueva colección
           </p>
 
-          <h1 className="max-w-2xl font-serif text-6xl leading-[0.95] tracking-[-0.04em] md:text-8xl">
+          <h1 className="max-w-lg font-serif text-5xl leading-[0.95] tracking-[-0.035em] sm:text-6xl lg:text-[5.8rem]">
             Brillá a tu manera.
           </h1>
 
-          <p className="mt-7 max-w-xl text-lg leading-8 text-[#5f5752]">
+          <p className="mt-6 max-w-lg text-base leading-7 text-[#5f5752] md:text-[1.05rem]">
             Joyas simples, modernas y auténticas para acompañarte todos los días.
             Diseños versátiles en plata, acero y piezas artesanales.
           </p>
 
-          <div className="mt-9 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
             <a
               href="#productos"
-              className="rounded-full bg-[#2B2B2B] px-8 py-4 text-center text-sm font-semibold text-white"
+              className="rounded-[4px] border border-[#2B2B2B] bg-transparent px-8 py-4 text-center text-sm font-medium text-[#2B2B2B] transition hover:bg-[#2B2B2B] hover:text-white"
             >
               Ver productos
             </a>
             <a
               href="#como-comprar"
-              className="rounded-full border border-[#C8B6A8] px-8 py-4 text-center text-sm font-semibold text-[#2B2B2B]"
+              className="rounded-[4px] border border-[#C8B6A8] px-8 py-4 text-center text-sm font-medium text-[#2B2B2B] transition hover:bg-[#C8B6A8]/20"
             >
               Cómo comprar
             </a>
           </div>
         </div>
 
-        <div className="relative">
-          <div className="rounded-[2rem] border border-[#C8B6A8] bg-white p-8 shadow-sm">
-            <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-[1.5rem] bg-[#F4EEE6] p-8">
-              <div className="absolute right-8 top-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#C8B6A8]/50 text-4xl text-[#C8B6A8]/70">
-                ✦
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
-                  Plata 925 · Acero · Artesanal
-                </p>
-              </div>
-
-              <div>
-                <p className="max-w-sm font-serif text-5xl leading-tight text-[#2B2B2B]">
-                  Detalles que acompañan tu forma de brillar.
-                </p>
-                <p className="mt-5 max-w-sm text-sm leading-6 text-[#6b625d]">
-                  Piezas simples, versátiles y auténticas pensadas para todos los días.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <span className="rounded-full border border-[#C8B6A8] bg-white/60 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#6b625d]">
-                  Simple
-                </span>
-                <span className="rounded-full border border-[#C8B6A8] bg-white/60 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#6b625d]">
-                  Versátil
-                </span>
-                <span className="rounded-full border border-[#C8B6A8] bg-white/60 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#6b625d]">
-                  Auténtica
-                </span>
-              </div>
-            </div>
+        <div className="relative lg:justify-self-end lg:w-full">
+          <div className="relative h-[380px] overflow-hidden rounded-[2rem] border-2 border-[#BFAE9E] shadow-[0_10px_30px_rgba(0,0,0,0.05)] md:h-[460px] lg:h-[560px] lg:rounded-l-[2rem] lg:rounded-r-none">
+            <img
+              src="/brand/herogchic.png"
+              alt="Editorial GILDA Joyas"
+              className="h-full w-full object-cover object-center"
+            />
           </div>
         </div>
       </section>
 
       <section id="productos" className="mx-auto max-w-7xl px-6 py-16 md:px-10">
-        <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[#A9A5A0]">
-              Catálogo
-            </p>
-            <h2 className="mt-3 font-serif text-5xl">Productos destacados</h2>
-          </div>
-          <p className="max-w-md text-sm leading-6 text-[#6b625d]">
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
+            Catálogo
+          </p>
+
+          <h2 className="mt-3 font-serif text-5xl md:text-6xl">
+            Productos destacados
+          </h2>
+
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#6b625d]">
             Una selección de piezas simples, versátiles y auténticas para todos los días.
-            Elegí tus favoritas y armá tu pedido de forma simple.
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <article
-              key={product.id}
-              className="group rounded-[1.7rem] border border-[#E6E3E0] bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-            >
-              <div className="flex aspect-square items-center justify-center rounded-[1.3rem] bg-[#FBF7F0]">
-                {product.images?.[0]?.src ? (
-                  <img
-                    src={product.images[0].src}
-                    alt={product.name}
-                    className="h-full w-full rounded-[1.3rem] object-cover"
-                  />
-                ) : (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full border border-[#C8B6A8] text-4xl text-[#C8B6A8]">
-                    ✦
-                  </div>
-                )}
-              </div>
+        <div className="mx-auto mb-12 max-w-6xl border-y border-[#E5DAD1] py-8">
+          <div className="flex flex-wrap justify-center gap-x-14 gap-y-5">
+            {materialFilters.map((filter) => (
+              <button
+                key={filter}
+                onClick={() => {
+                  setActiveCategory(filter);
+                  setActiveType("Todos");
+                }}
+                className={`text-[15px] font-bold uppercase tracking-[0.18em] transition ${
+                  activeCategory === filter
+                    ? "text-[#2B2B2B]"
+                    : "text-[#A28776] hover:text-[#2B2B2B]"
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
 
-              <p className="mt-5 text-[11px] uppercase tracking-[0.25em] text-[#A9A5A0]">
-                {product.categories?.[0]?.name}
-              </p>
-              <h3 className="mt-2 text-lg font-semibold">{product.name}</h3>
-              <p className="mt-2 min-h-12 text-sm leading-6 text-[#6b625d]">
-                {cleanHtml(product.short_description)}
-              </p>
+          <div className="mx-auto mt-7 h-px max-w-3xl bg-[#E5DAD1]" />
 
-              <div className="mt-5 flex items-center justify-between border-t border-[#E6E3E0] pt-4">
-                <strong>$ {product.price}</strong>
-                <button
-                  onClick={() => addToCart(product)}
-                  className="rounded-full bg-[#2B2B2B] px-4 py-2 text-sm text-white"
-                >
-                  Agregar
-                </button>
-              </div>
-            </article>
-          ))}
+          <div className="mt-7 flex flex-wrap justify-center gap-x-8 gap-y-4">
+            {typeFilters.map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setActiveType(filter)}
+                className={`text-[14px] transition ${
+                  activeType === filter
+                    ? "font-bold text-[#2B2B2B]"
+                    : "font-medium text-[#8A7E76] hover:text-[#2B2B2B]"
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
         </div>
+
+        {showSearch && (
+          <div className="mx-auto mb-10 max-w-md">
+            <input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Buscar por nombre de producto"
+              className="w-full rounded-[4px] border border-[#D8C6B7] bg-transparent px-4 py-3 text-center text-sm outline-none placeholder:text-[#A9A5A0] focus:border-[#2B2B2B]"
+            />
+          </div>
+        )}
+
+        {visibleProducts.length === 0 ? (
+          <div className="mx-auto max-w-3xl border border-[#E5DAD1] bg-white/35 px-6 py-10 text-center text-sm text-[#6b625d]">
+            No hay productos cargados en esta combinación todavía.
+          </div>
+        ) : (
+          <div className="flex flex-wrap justify-center gap-x-7 gap-y-12">
+            {visibleProducts.map((product) => (
+              <article
+                key={product.id}
+                className="group w-full bg-transparent sm:w-[calc(50%-14px)] lg:w-[calc(25%-21px)]"
+              >
+                <button
+                  type="button"
+                  aria-label={`Ver ${product.name}`}
+                  className="flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-[4px] bg-[#F1EAE2]"
+                >
+                  {product.images?.[0]?.src ? (
+                    <img
+                      src={product.images[0].src}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.04]"
+                    />
+                  ) : (
+                    <div className="flex h-24 w-24 items-center justify-center border border-[#C8B6A8] text-4xl text-[#C8B6A8]">
+                      ✦
+                    </div>
+                  )}
+                </button>
+
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <strong className="text-[15px] font-medium">
+                    $ {product.price}
+                  </strong>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      aria-label="Agregar a favoritos"
+                      onClick={() => toggleFavorite(product.id)}
+                      className={`flex h-8 w-8 items-center justify-center rounded-full border text-sm transition ${
+                        favorites.includes(product.id)
+                          ? "border-[#2B2B2B] bg-[#2B2B2B] text-white"
+                          : "border-[#D8C6B7] text-[#2B2B2B] hover:bg-[#E9DDD2]"
+                      }`}
+                    >
+                      ♡
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => addToCart(product)}
+                      className="rounded-[4px] border border-[#2B2B2B] px-3 py-1.5 text-[12px] font-medium text-[#2B2B2B] transition hover:bg-[#2B2B2B] hover:text-white"
+                    >
+                      Agregar
+                    </button>
+                  </div>
+                </div>
+
+                <p className="mt-4 text-center text-[11px] uppercase tracking-[0.22em] text-[#9F958E]">
+                  {product.categories?.[0]?.name}
+                </p>
+
+                <h3 className="mx-auto mt-2 min-h-[42px] max-w-[92%] text-center text-[15px] font-normal leading-snug text-[#2B2B2B]">
+                  {product.name}
+                </h3>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       <section
@@ -259,76 +441,154 @@ export default function Home() {
         ))}
       </section>
 
-      <section id="materiales" className="mx-auto max-w-7xl px-6 py-16 md:px-10">
-        <div className="rounded-[2rem] bg-[#2B2B2B] p-8 text-white md:p-12">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#C8B6A8]">
-            Materiales y cuidados
-          </p>
-          <h2 className="mt-4 max-w-2xl font-serif text-5xl">
-            Diseños pensados para acompañarte todos los días.
-          </h2>
-          <p className="mt-5 max-w-2xl leading-7 text-[#E6E3E0]">
-            Cada pieza está pensada para acompañarte en lo cotidiano: diseños simples,
-            combinables y fáciles de usar. Trabajamos con plata 925, acero blanco,
-            acero dorado, acero quirúrgico y accesorios artesanales. Para conservar
-            tus joyas por más tiempo, evitá el contacto directo con perfumes,
-            cremas, agua de pileta, agua de mar y productos químicos.
-          </p>
+      <section id="materiales" className="mx-auto max-w-7xl px-6 py-12 md:px-10">
+        <div className="rounded-[2rem] border border-[#E6E3E0] bg-white/65 p-6 md:p-8">
+          <div className="grid gap-6 md:grid-cols-[0.75fr_1.25fr] md:items-stretch">
+            <div className="flex flex-col items-center justify-center rounded-[1.5rem] bg-[#2B2B2B] p-7 text-center text-white">
+              <p className="text-xs uppercase tracking-[0.3em] text-[#C8B6A8]">
+                Materiales y cuidados
+              </p>
+              <h2 className="mt-7 max-w-sm font-serif text-4xl leading-tight">
+                Joyas para usar todos los días.
+              </h2>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <article className="rounded-[1.3rem] border border-[#E6E3E0] bg-white/85 p-5">
+                <h3 className="text-base font-semibold text-[#2B2B2B]">Materiales</h3>
+                <p className="mt-3 text-sm leading-6 text-[#5f5752]">
+                  Plata 925, acero blanco, acero dorado, acero quirúrgico y piezas artesanales.
+                </p>
+              </article>
+
+              <article className="rounded-[1.3rem] border border-[#E6E3E0] bg-white/85 p-5">
+                <h3 className="text-base font-semibold text-[#2B2B2B]">Uso diario</h3>
+                <p className="mt-3 text-sm leading-6 text-[#5f5752]">
+                  Diseños cómodos y combinables para acompañar distintos estilos.
+                </p>
+              </article>
+
+              <article className="rounded-[1.3rem] border border-[#E6E3E0] bg-white/85 p-5">
+                <h3 className="text-base font-semibold text-[#2B2B2B]">Cuidados</h3>
+                <p className="mt-3 text-sm leading-6 text-[#5f5752]">
+                  Evitá perfumes, cremas, agua de mar, pileta y productos químicos.
+                </p>
+              </article>
+            </div>
+          </div>
         </div>
       </section>
 
-      {showCheckout && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2B2B]/50 px-4">
-          <div className="w-full max-w-md rounded-[2rem] bg-white p-6 shadow-xl">
-            {!orderConfirmed ? (
-              <>
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xl font-semibold">Finalizar compra</h4>
-                  <button onClick={() => setShowCheckout(false)}>✕</button>
-                </div>
+      <footer className="mt-16 border-t border-[#3A3A3A] bg-[#2B2B2B] px-6 py-12 text-white md:px-10">
+        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="/brand/gildajoyasblanco.svg"
+              alt="GILDA Joyas"
+              className="h-24 w-24 object-contain"
+            />
+            <p className="mt-5 max-w-xs text-center text-sm leading-6 text-[#E6E3E0]">
+              Joyas simples, modernas y auténticas para acompañarte todos los días.
+            </p>
+          </div>
 
-                <form onSubmit={confirmOrder} className="mt-5 space-y-3">
-                  <input required placeholder="Nombre" className="w-full rounded-2xl border border-[#C8B6A8] px-4 py-3" />
-                  <input required type="email" placeholder="Email" className="w-full rounded-2xl border border-[#C8B6A8] px-4 py-3" />
-                  <input required placeholder="Zona de entrega" className="w-full rounded-2xl border border-[#C8B6A8] px-4 py-3" />
-                  <select required className="w-full rounded-2xl border border-[#C8B6A8] px-4 py-3">
-                    <option value="">Medio de pago</option>
-                    <option>Transferencia bancaria</option>
-                    <option>Efectivo al retirar</option>
-                  </select>
+          <div>
+            <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#C8B6A8]">
+              GILDA Joyas
+            </h4>
+            <ul className="mt-4 space-y-3 text-sm text-[#E6E3E0]">
+              <li><a href="#sobre-gilda">Sobre la marca</a></li>
+              <li><a href="#productos">Productos</a></li>
+              <li><a href="#materiales">Materiales y cuidados</a></li>
+            </ul>
+          </div>
 
-                  <div className="rounded-2xl bg-[#FBF7F0] p-4 text-sm">
-                    <p className="font-semibold">Total estimado: $ {total}</p>
-                    <p className="mt-1 text-[#6b625d]">
-                      Demo funcional: no procesa pagos reales.
-                    </p>
-                  </div>
+          <div>
+            <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#C8B6A8]">
+              Ayuda
+            </h4>
+            <ul className="mt-4 space-y-3 text-sm text-[#E6E3E0]">
+              <li>Envíos y retiros</li>
+              <li>Cambios</li>
+              <li>Medios de pago</li>
+              <li>Preguntas frecuentes</li>
+            </ul>
+          </div>
 
-                  <button className="w-full rounded-full bg-[#2B2B2B] px-5 py-3 text-white">
-                    Confirmar pedido
-                  </button>
-                </form>
-              </>
-            ) : (
-              <div className="text-center">
-                <img src="/brand/gildajoyaslogo.svg" alt="" className="mx-auto h-20 w-20" />
-                <h4 className="mt-4 text-xl font-semibold">
-                  Pedido recibido correctamente
-                </h4>
-                <p className="mt-2 text-sm text-[#6b625d]">
-                  GILDA Joyas se comunicará para confirmar disponibilidad y entrega.
-                </p>
-                <button
-                  onClick={() => {
-                    setShowCheckout(false);
-                    setOrderConfirmed(false);
-                  }}
-                  className="mt-5 rounded-full bg-[#2B2B2B] px-5 py-3 text-white"
-                >
-                  Volver a la tienda
-                </button>
-              </div>
-            )}
+          <div>
+            <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#C8B6A8]">
+              Contacto
+            </h4>
+            <ul className="mt-4 space-y-3 text-sm text-[#E6E3E0]">
+              <li>Instagram: @gvmjoyas</li>
+              <li>Email: gvmjoyas@hotmail.com</li>
+              <li>Atención personalizada</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs uppercase tracking-[0.2em] text-[#A9A5A0] md:flex-row">
+          <p>© GILDA Joyas</p>
+          <p>Simple · Versátil · Moderna · Auténtica</p>
+        </div>
+      </footer>
+
+      {showSearch && (
+        <div className="fixed inset-0 z-[90] bg-black/20 px-6 pt-28">
+          <div className="mx-auto max-w-xl rounded-[8px] border border-[#E5DAD1] bg-[#FFFCF8] p-6 shadow-[0_20px_50px_rgba(80,55,40,0.18)]">
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <h3 className="font-serif text-3xl text-[#2B2B2B]">
+                Buscar en GILDA Joyas
+              </h3>
+
+              <button
+                type="button"
+                onClick={() => setShowSearch(false)}
+                className="text-2xl leading-none text-[#6b625d] hover:text-[#2B2B2B]"
+              >
+                ×
+              </button>
+            </div>
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                submitSearch();
+              }}
+            >
+              <input
+                autoFocus
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Buscar anillos, aros, pulseras..."
+                className="w-full rounded-[4px] border border-[#D8C6B7] bg-transparent px-4 py-3 text-sm outline-none placeholder:text-[#A9A5A0] focus:border-[#2B2B2B]"
+              />
+
+              <button
+                type="submit"
+                className="mt-4 w-full rounded-[4px] border border-[#2B2B2B] px-5 py-3 text-sm font-medium text-[#2B2B2B] transition hover:bg-[#2B2B2B] hover:text-white"
+              >
+                Ver resultados
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showAccountNotice && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/20 px-6">
+          <div className="max-w-sm rounded-[8px] border border-[#E5DAD1] bg-[#FFFCF8] p-7 text-center shadow-[0_20px_50px_rgba(80,55,40,0.18)]">
+            <h3 className="font-serif text-3xl text-[#2B2B2B]">Mi cuenta</h3>
+            <p className="mt-3 text-sm leading-6 text-[#6b625d]">
+              Esta sección estará disponible próximamente. Por ahora podés armar tu pedido desde el catálogo.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowAccountNotice(false)}
+              className="mt-5 rounded-[4px] border border-[#2B2B2B] px-5 py-2 text-sm transition hover:bg-[#2B2B2B] hover:text-white"
+            >
+              Entendido
+            </button>
           </div>
         </div>
       )}
