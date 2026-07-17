@@ -562,10 +562,10 @@ export default function Home() {
               Ayuda
             </h4>
             <ul className="mt-4 space-y-3 text-sm text-[#E6E3E0]">
-              <li>Envíos y retiros</li>
-              <li>Cambios</li>
-              <li>Medios de pago</li>
-              <li>Preguntas frecuentes</li>
+              <li><a href="#materiales" className="transition hover:text-white">Envíos y retiros</a></li>
+              <li><a href="#materiales" className="transition hover:text-white">Cambios</a></li>
+              <li><a href="#materiales" className="transition hover:text-white">Medios de pago</a></li>
+              <li><a href="#materiales" className="transition hover:text-white">Preguntas frecuentes</a></li>
             </ul>
           </div>
 
@@ -574,8 +574,23 @@ export default function Home() {
               Contacto
             </h4>
             <ul className="mt-4 space-y-3 text-sm text-[#E6E3E0]">
-              <li>Instagram: @gvmjoyas</li>
-              <li>Email: gvmjoyas@hotmail.com</li>
+              <li>
+                Instagram:{" "}
+                <a
+                  href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/gvmjoyas"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition hover:text-white"
+                >
+                  @gvmjoyas
+                </a>
+              </li>
+              <li>
+                Email:{" "}
+                <a href="mailto:gvmjoyas@hotmail.com" className="transition hover:text-white">
+                  gvmjoyas@hotmail.com
+                </a>
+              </li>
               <li>Atención personalizada</li>
             </ul>
           </div>
