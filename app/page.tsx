@@ -269,23 +269,23 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="grid items-center gap-8 px-6 pb-10 pt-8 md:grid-cols-[0.85fr_1.15fr] md:px-8 lg:gap-10 lg:pl-10 lg:pr-0">
-        <div className="max-w-xl">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#C8B6A8] px-4 py-2 text-xs uppercase tracking-[0.25em] text-[#6b625d]">
+      <section className="grid items-center gap-8 px-6 pb-10 pt-8 text-center md:grid-cols-[0.85fr_1.15fr] md:px-8 md:text-left lg:gap-10 lg:pl-10 lg:pr-0">
+        <div className="mx-auto max-w-xl md:mx-0">
+          <p className="mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-[#C8B6A8] px-4 py-2 text-xs uppercase tracking-[0.25em] text-[#6b625d] md:mx-0">
             <span className="h-2 w-2 rounded-full bg-[#E79CB3]" />
             Nueva colección
           </p>
 
-          <h1 className="max-w-lg font-serif text-5xl leading-[0.95] tracking-[-0.035em] sm:text-6xl lg:text-[5.8rem]">
+          <h1 className="mx-auto max-w-lg font-serif text-5xl leading-[0.95] tracking-[-0.035em] sm:text-6xl md:mx-0 lg:text-[5.8rem]">
             Brillá a tu manera.
           </h1>
 
-          <p className="mt-6 max-w-lg text-base leading-7 text-[#5f5752] md:text-[1.05rem]">
+          <p className="mx-auto mt-6 max-w-lg text-base leading-7 text-[#5f5752] md:mx-0 md:text-[1.05rem]">
             Joyas simples, modernas y auténticas para acompañarte todos los días.
             Diseños versátiles en plata, acero y piezas artesanales.
           </p>
 
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row md:justify-start">
             <a
               href="#productos"
               className="rounded-[4px] border border-[#2B2B2B] bg-transparent px-8 py-4 text-center text-sm font-medium text-[#2B2B2B] transition hover:bg-[#2B2B2B] hover:text-white"
@@ -533,8 +533,8 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="mt-16 border-t border-[#3A3A3A] bg-[#2B2B2B] px-6 py-12 text-white md:px-10">
-        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
+      <footer className="mt-16 border-t border-[#3A3A3A] bg-[#2B2B2B] px-6 pb-28 pt-12 text-center text-white md:px-10 md:pb-12">
+        <div className="mx-auto grid max-w-7xl gap-10 text-center md:grid-cols-[1.2fr_1fr_1fr_1fr] md:items-start">
           <div className="flex flex-col items-center text-center">
             <img
               src="/brand/gildajoyasblanco.svg"
@@ -546,7 +546,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div>
+          <div className="text-center">
             <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#C8B6A8]">
               GILDA Joyas
             </h4>
@@ -557,7 +557,7 @@ export default function Home() {
             </ul>
           </div>
 
-          <div>
+          <div className="text-center">
             <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#C8B6A8]">
               Ayuda
             </h4>
@@ -569,7 +569,7 @@ export default function Home() {
             </ul>
           </div>
 
-          <div>
+          <div className="text-center">
             <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#C8B6A8]">
               Contacto
             </h4>
@@ -596,7 +596,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs uppercase tracking-[0.2em] text-[#A9A5A0] md:flex-row">
+        <div className="mx-auto mt-10 flex max-w-7xl flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-center text-xs uppercase tracking-[0.2em] text-[#A9A5A0] md:flex-row">
           <p>© GILDA Joyas</p>
           <p>Simple · Versátil · Moderna · Auténtica</p>
         </div>
