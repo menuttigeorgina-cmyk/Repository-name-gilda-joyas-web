@@ -190,8 +190,8 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FBF7F0] text-[#2B2B2B]">
       <header className="sticky top-0 z-50 border-b border-[#E8DED5] bg-[#FAF6F2]/95 backdrop-blur-md">
-        <div className="mx-auto grid max-w-7xl grid-cols-3 items-center px-5 py-2 md:px-8 lg:px-10">
-          <nav className="hidden items-center gap-6 text-[14px] font-normal text-[#2B2B2B] md:flex lg:gap-8 lg:text-[15px]">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-10 px-5 py-2 md:px-8 lg:grid lg:grid-cols-3 lg:gap-0 lg:px-10">
+          <nav className="hidden items-center gap-6 text-[14px] font-normal text-[#2B2B2B] lg:flex lg:gap-8 lg:text-[15px]">
             <a href="#" className="transition hover:text-[#9C7F6C]">
               Inicio
             </a>
@@ -215,11 +215,11 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="flex items-center justify-end gap-3 text-[#2B2B2B] md:gap-5">
+          <div className="flex items-center justify-center gap-5 text-[#2B2B2B] lg:justify-end">
             <button
               type="button"
               onClick={() => setShowAccountNotice(true)}
-              className="hidden text-[14px] font-normal md:inline lg:text-[15px]"
+              className="hidden text-[14px] font-normal lg:inline lg:text-[15px]"
             >
               Cuenta
             </button>
