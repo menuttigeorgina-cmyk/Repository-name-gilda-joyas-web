@@ -312,8 +312,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="productos" className="mx-auto max-w-7xl px-6 py-16 md:px-10">
-        <div className="mx-auto mb-12 max-w-3xl text-center">
+      <section id="productos" className="mx-auto max-w-7xl px-6 py-10 md:px-10 md:py-16">
+        <div className="mx-auto mb-8 max-w-3xl text-center md:mb-12">
           <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
             Catálogo
           </p>
@@ -322,13 +322,13 @@ export default function Home() {
             Productos destacados
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#6b625d]">
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#6b625d]">
             Una selección de piezas simples, versátiles y auténticas para todos los días.
           </p>
         </div>
 
-        <div className="mx-auto mb-12 max-w-6xl border-y border-[#E5DAD1] py-8">
-          <div className="flex flex-wrap justify-center gap-x-14 gap-y-5">
+        <div className="mx-auto mb-8 max-w-6xl border-y border-[#E5DAD1] py-6 md:mb-12 md:py-8">
+          <div className="grid grid-cols-2 justify-items-center gap-x-6 gap-y-5 md:flex md:flex-wrap md:justify-center md:gap-x-14">
             {materialFilters.map((filter) => (
               <button
                 key={filter}
@@ -336,7 +336,7 @@ export default function Home() {
                   setActiveCategory(filter);
                   setActiveType("Todos");
                 }}
-                className={`text-[15px] font-bold uppercase tracking-[0.18em] transition ${
+                className={`text-center text-[13px] font-bold uppercase tracking-[0.18em] transition sm:text-[14px] md:text-[15px] ${
                   activeCategory === filter
                     ? "text-[#2B2B2B]"
                     : "text-[#A28776] hover:text-[#2B2B2B]"
@@ -347,14 +347,14 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="mx-auto mt-7 h-px max-w-3xl bg-[#E5DAD1]" />
+          <div className="mx-auto mt-6 h-px max-w-3xl bg-[#E5DAD1]" />
 
-          <div className="mt-7 flex flex-wrap justify-center gap-x-8 gap-y-4">
+          <div className="mt-6 grid grid-cols-3 justify-items-center gap-x-4 gap-y-4 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-8">
             {typeFilters.map((filter) => (
               <button
                 key={filter}
                 onClick={() => setActiveType(filter)}
-                className={`text-[14px] transition ${
+                className={`text-center text-[13px] transition sm:text-[14px] ${
                   activeType === filter
                     ? "font-bold text-[#2B2B2B]"
                     : "font-medium text-[#8A7E76] hover:text-[#2B2B2B]"
@@ -452,14 +452,14 @@ export default function Home() {
         id="como-comprar"
         className="mx-auto max-w-7xl px-6 py-16 md:px-10"
       >
-        <div className="mx-auto mb-12 max-w-3xl text-center">
+        <div className="mx-auto mb-8 max-w-3xl text-center md:mb-12">
           <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
             Cómo comprar
           </p>
           <h2 className="mt-3 font-serif text-4xl md:text-5xl">
             Comprar es muy fácil
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#6b625d]">
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#6b625d]">
             Elegí tus joyas favoritas, agregalas al carrito y completá tus datos.
             Luego nos contactamos por WhatsApp para coordinar el pago y la entrega.
           </p>
