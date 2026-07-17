@@ -80,6 +80,7 @@ export default function Home() {
     "Pulseras",
     "Collares y Cadenas",
     "Dijes",
+    "Tobilleras",
   ];
 
   function normalize(value = "") {
@@ -115,9 +116,7 @@ export default function Home() {
 
         return normalize(text).includes(normalize(searchTerm));
       })
-    : filteredProducts.length > 0
-      ? filteredProducts
-      : products;
+    : filteredProducts;
 
   function addToCart(product: Product) {
     const price = Number(product.price || 0);
