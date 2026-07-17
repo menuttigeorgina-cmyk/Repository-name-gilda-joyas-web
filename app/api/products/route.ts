@@ -14,7 +14,7 @@ export async function GET() {
 
   const auth = Buffer.from(`${key}:${secret}`).toString("base64");
 
-  const response = await fetch(`${url}/wp-json/wc/v3/products?per_page=20`, {
+  const response = await fetch(`${url}/wp-json/wc/v3/products?per_page=100`, {
     headers: {
       Authorization: `Basic ${auth}`,
     },
