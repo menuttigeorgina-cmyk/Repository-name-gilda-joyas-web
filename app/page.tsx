@@ -80,7 +80,6 @@ export default function Home() {
     "Pulseras",
     "Collares y Cadenas",
     "Dijes",
-    "Tobilleras",
   ];
 
   function normalize(value = "") {
