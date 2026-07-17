@@ -312,8 +312,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="productos" className="mx-auto max-w-7xl px-6 py-10 md:px-10 md:py-16">
-        <div className="mx-auto mb-8 max-w-3xl text-center md:mb-12">
+      <section id="productos" className="mx-auto max-w-7xl px-6 py-8 md:px-10 md:py-16">
+        <div className="mx-auto mb-6 max-w-3xl text-center md:mb-12">
           <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
             Catálogo
           </p>
@@ -327,8 +327,8 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="mx-auto mb-8 max-w-6xl border-y border-[#E5DAD1] py-6 md:mb-12 md:py-8">
-          <div className="grid grid-cols-2 justify-items-center gap-x-6 gap-y-5 md:flex md:flex-wrap md:justify-center md:gap-x-14">
+        <div className="mx-auto mb-7 max-w-6xl border-y border-[#E5DAD1] py-5 md:mb-12 md:py-8">
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 md:gap-x-14 md:gap-y-5">
             {materialFilters.map((filter) => (
               <button
                 key={filter}
@@ -336,7 +336,7 @@ export default function Home() {
                   setActiveCategory(filter);
                   setActiveType("Todos");
                 }}
-                className={`text-center text-[13px] font-bold uppercase tracking-[0.18em] transition sm:text-[14px] md:text-[15px] ${
+                className={`text-center text-[13px] font-bold uppercase tracking-[0.14em] transition sm:text-[14px] md:text-[15px] md:tracking-[0.18em] ${
                   activeCategory === filter
                     ? "text-[#2B2B2B]"
                     : "text-[#A28776] hover:text-[#2B2B2B]"
@@ -347,9 +347,9 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="mx-auto mt-6 h-px max-w-3xl bg-[#E5DAD1]" />
+          <div className="mx-auto mt-5 h-px max-w-3xl bg-[#E5DAD1]" />
 
-          <div className="mt-6 grid grid-cols-3 justify-items-center gap-x-4 gap-y-4 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-8">
+          <div className="mt-5 flex flex-wrap justify-center gap-x-7 gap-y-4 sm:gap-x-8">
             {typeFilters.map((filter) => (
               <button
                 key={filter}
@@ -452,7 +452,7 @@ export default function Home() {
         id="como-comprar"
         className="mx-auto max-w-7xl px-6 py-16 md:px-10"
       >
-        <div className="mx-auto mb-8 max-w-3xl text-center md:mb-12">
+        <div className="mx-auto mb-6 max-w-3xl text-center md:mb-12">
           <p className="text-xs uppercase tracking-[0.35em] text-[#A9A5A0]">
             Cómo comprar
           </p>
@@ -469,7 +469,7 @@ export default function Home() {
           {[
             ["01", "Elegí tus piezas", "Explorá el catálogo y tocá “Agregar” en los productos que quieras sumar a tu pedido."],
             ["02", "Revisá tu carrito", "Entrá a “Mi carrito”, completá tu mail y tus datos de contacto con atención."],
-            ["03", "Coordiná la entrega", "Seleccioná la forma de entrega y el método de pago. Luego GILDA Joyas se contacta por WhatsApp para coordinar."],
+            ["03", "Coordiná la entrega", "Seleccioná la forma de entrega y el método de pago. Realizamos entregas locales y envíos al resto del país según tu ubicación."],
           ].map(([number, title, text]) => (
             <div key={number} className="border border-[#E5DAD1] bg-white/35 p-7 text-center">
               <p className="text-xs uppercase tracking-[0.3em] text-[#A9A5A0]">{number}</p>
